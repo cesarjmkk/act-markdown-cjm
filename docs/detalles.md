@@ -1,12 +1,14 @@
-# Notas sobre la instalación
+# Requisitos y Configuración en VirtualBox
 
-Detalles complementarios para la práctica de ASO.
+Ajustes de hardware recomendados para la máquina virtual en el módulo de ASO.
 
-## Requisitos mínimos de hardware
+## Recursos asignados a la máquina virtual
 
-- **Procesador:** 2 GHz dual-core.
-- **Memoria RAM:** 4 GB.
-- **Almacenamiento:** 25 GB libres.
+- **Memoria RAM:** 4096 MB (4 GB) mínimo recomendado.
+- **Procesador (CPU):** 2 núcleos / hilos de procesamiento.
+- **Memoria de vídeo:** 128 MB con aceleración 3D habilitada.
+- **Disco virtual (VDI):** 25 GB con reserva dinámica de espacio.
+- **Controlador de red:** Adaptador puente (*Bridge*) o NAT.
 
 ---
 
