@@ -1,79 +1,58 @@
-# Administración de Almacenamiento con LVM en Linux
+# Instalación de Ubuntu Desktop 24.04 LTS
 
-Apuntes prácticos sobre la gestión de volúmenes lógicos (LVM) para el módulo de Administración de Sistemas Operativos (ASO).
+Guía rápida de instalación y configuración inicial para el módulo de ASO.
 
-## Introducción a LVM
+## Preparación del sistema
 
-En entornos de servidores, particionar discos de forma fija suele dar problemas cuando el almacenamiento se queda corto. Con **LVM (Logical Volume Manager)** desacoplamos el almacenamiento físico del sistema de ficheros, permitiendo redimensionar particiones en *caliente* sin necesidad de reiniciar la máquina, utilizando utilidades de consola como `lvextend` de forma sencilla.
+Para instalar **Ubuntu 24.04**, arrancamos el equipo desde el medio de instalación en modo *UEFI* y verificamos la integridad del disco abriendo una terminal con `lsblk` antes de iniciar el asistente.
 
----
+### Pasos de instalación
 
-## Flujo de trabajo y creación de volúmenes
+1. Seleccionar idioma y distribución del teclado.
+2. Elegir instalación interactiva con software básico.
+3. Definir el particionado del disco y crear el usuario administrador.
+4. Reiniciar el equipo y retirar el medio de instalación.
 
-Para configurar un nuevo volumen lógico desde cero, el orden de creación es el siguiente:
+Paquetes básicos a comprobar tras el primer inicio:
 
-1. Inicializar el disco o partición como volumen físico (Physical Volume).
-2. Crear o extender un grupo de volúmenes (Volume Group) que agrupe los discos físicos.
-3. Crear el volumen lógico (Logical Volume) con el espacio deseado.
-4. Dar formato al volumen lógico (por ejemplo, con `ext4` o `xfs`) y montarlo.
-
-Conceptos clave del esquema LVM:
-
-- **PV (Physical Volume):** Discos duros reales o particiones estándar (ej. `/dev/sdb1`).
-- **VG (Volume Group):** Fondo común de almacenamiento que une uno o varios PVs.
-- **LV (Logical Volume):** La partición virtual final sobre la que se crea el sistema de ficheros.
+- `curl`: Descarga de recursos por terminal.
+- `git`: Control de versiones.
+- `build-essential`: Compiladores básicos del sistema.
 
 ---
 
-## Comandos de aprovisionamiento
+## Actualización inicial post-instalación
 
-Script básico en Bash para preparar un disco secundario `/dev/sdb`, crear un volumen lógico de 10 GB y dejarlo montado en `/data`:
+Comandos ejecutados desde la terminal tras el primer arranque:
 
 ```bash
-#!/bin/bash
-# Preparar el disco físico y el grupo de volúmenes
-sudo pvcreate /dev/sdb
-sudo vgcreate vg_datos /dev/sdb
-
-# Crear un volumen lógico de 10G y darle formato ext4
-sudo lvcreate -L 10G -n lv_almacen vg_datos
-sudo mkfs.ext4 /dev/vg_datos/lv_almacen
-
-# Crear punto de montaje y montar
-sudo mkdir -p /data
-sudo mount /dev/vg_datos/lv_almacen /data
-
-# Comprobar el espacio disponible
-df -hT /data
+sudo apt update && sudo apt upgrade -y
+sudo apt install -y curl git
 ```
 
 ---
 
-## Enlaces de referencia
+## Enlaces
 
-- Documentación externa: [Guía de LVM en kernel.org](https://www.kernel.org/doc/html/latest/admin-guide/LVM.html).
-- Parámetros avanzados y políticas de snapshot: [docs/detalles.md](docs/detalles.md).
+- Web oficial: [Descarga de Ubuntu 24.04](https://ubuntu.com/download/desktop).
+- Configuración adicional: [docs/detalles.md](docs/detalles.md).
 
 ---
 
 ## Recursos gráficos
 
-### Imagen local (Assets)
-Esquema y logotipo del sistema operativo sobre el que se realizan las prácticas:
+![Logo Ubuntu](assets/mi-imagen.png)
 
-![Tux Linux](assets/mi-imagen.png)
-
-### Centro educativo (Wikimedia Commons)
-Fotografía del IES Clara del Rey donde se imparte el ciclo de ASIR:
+Instituto donde realizamos la práctica:
 
 ![IES Clara del Rey](https://upload.wikimedia.org/wikipedia/commons/2/28/I.e.s._clara_del_rey_%28Prosperidad%2C_Madrid%29.jpg)
 
 ---
 
-## Comparativa de comandos LVM por capa
+## Particionado recomendado
 
-| Capa LVM | Comando de creación | Comando de visualización | Comando de eliminación |
-| :--- | :--- | :--- | :--- |
-| **Physical Volume (PV)** | `pvcreate` | `pvs` / `pvdisplay` | `pvremove` |
-| **Volume Group (VG)** | `vgcreate` | `vgs` / `vgdisplay` | `vgremove` |
-| **Logical Volume (LV)** | `lvcreate` | `lvs` / `lvdisplay` | `lvremove` |
+| Punto de montaje | Sistema de ficheros | Tamaño sugerido |
+| :--- | :--- | :--- |
+| `/boot/efi` | FAT32 | 512 MB |
+| `/` (raíz) | ext4 | 40 GB |
+| `/home` | ext4 | Resto del disco |
