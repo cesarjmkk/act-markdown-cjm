@@ -1,3 +1,5 @@
+![Banner Ubuntu](assets/mi-imagen.png)
+
 # Instalación de Ubuntu Desktop 24.04 LTS
 
 Guía rápida de instalación y configuración inicial para el módulo de ASO.
@@ -39,11 +41,9 @@ sudo apt install -y curl git
 
 ---
 
-## Recursos gráficos
+## Centro educativo
 
-![Logo Ubuntu](assets/mi-imagen.png)
-
-Instituto donde realizamos la práctica:
+Práctica realizada en el IES Clara del Rey:
 
 ![IES Clara del Rey](https://upload.wikimedia.org/wikipedia/commons/2/28/I.e.s._clara_del_rey_%28Prosperidad%2C_Madrid%29.jpg)
 
