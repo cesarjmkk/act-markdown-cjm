@@ -2,7 +2,7 @@
 
 # Instalación de Ubuntu Desktop 24.04 LTS en VirtualBox
 
-Guía para la creación y configuración de una máquina virtual para el módulo de ASO.
+Guía para la creación y configuración de una máquina virtual.
 
 ---
 

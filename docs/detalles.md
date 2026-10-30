@@ -1,7 +1,6 @@
 # Requisitos y Configuración en VirtualBox
 
-Ajustes de hardware recomendados para la máquina virtual en el módulo de ASO.
-
+Configuración de hardware recomendados para la máquina virtual.
 ## Recursos asignados a la máquina virtual
 
 - **Memoria RAM:** 4096 MB (4 GB) mínimo recomendado.
