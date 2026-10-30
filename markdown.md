@@ -68,4 +68,4 @@ Esquema de particionado aplicado automáticamente por el instalador sobre el dis
 
 Práctica realizada en IES Clara del Rey, en Madrid:
 
-![IES Clara del Rey](https://upload.wikimedia.org/wikipedia/commons/2/28/I.e.s._clara_del_rey_%28Prosperidad%2C_Madrid%29.jpg)
+![IES Clara del Rey](https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/I.e.s._clara_del_rey_%28Prosperidad%2C_Madrid%29.jpg/1280px-I.e.s._clara_del_rey_%28Prosperidad%2C_Madrid%29.jpg)
