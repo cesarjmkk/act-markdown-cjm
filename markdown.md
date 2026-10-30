@@ -26,31 +26,28 @@ Para desplegar **Ubuntu 24.04** en VirtualBox, descargamos la imagen ISO oficial
 El procedimiento completo para el despliegue dentro del hipervisor es el siguiente:
 
 1. **Creación de la máquina virtual:** Abrir VirtualBox, pulsar en *Nueva*, asignar el nombre a la máquina y seleccionar la imagen ISO descargada.
-2. **Asignación de hardware:** Configurar al menos 4 GB de memoria RAM y 2 núcleos de CPU dedicados.
-3. **Creación del disco virtual:** Asignar un disco duro virtual en formato VDI de al menos 25 GB con almacenamiento dinámico.
+2. **Asignación de hardware:** Configurar la memoria RAM y los núcleos de CPU dedicados.
+3. **Creación del disco virtual:** Asignar un disco duro virtual en formato VDI con almacenamiento dinámico.
 4. **Arranque del instalador:** Iniciar la máquina virtual y seleccionar la opción *Try or Install Ubuntu* en el menú GRUB.
-5. **Configuración del asistente:** Elegir idioma y distribución de teclado, marcar la instalación interactiva con utilidades mínimas y seleccionar el particionado automático del disco virtual.
-6. **Creación de la cuenta de usuario:** Definir el nombre del equipo, nombre de usuario y contraseña de administración para el acceso por `sudo`.
-7. **Finalización:** Esperar a que concluya el volcado de paquetes, pulsar en reiniciar y presionar *Enter* cuando el sistema solicite retirar el medio de instalación virtual.
+5. **Configuración del asistente:** Elegir idioma y teclado, marcar la instalación interactiva y seleccionar el particionado automático del disco virtual.
+6. **Creación de la cuenta de usuario:** Definir el nombre del equipo, usuario y contraseña de administración para el acceso con permisos de superusuario.
+7. **Finalización:** Esperar a que concluya la instalación, reiniciar la máquina y retirar el medio virtual.
 
-Ajustes iniciales que debemos comprobar en la máquina tras el primer inicio:
+Ajustes a comprobar tras el primer inicio:
 
-- Instalar las **Guest Additions** de VirtualBox para habilitar pantalla completa y portapapeles bidireccional.
-- Comprobar la conectividad de red con el comando `ip a` o `ping -c 3 8.8.8.8`.
-- Asegurar que el usuario pertenece al grupo `sudo` para tareas administrativas.
+- Instalar las **Guest Additions** de VirtualBox para mejorar la resolución de pantalla y la integración del ratón.
+- Comprobar que la máquina virtual tiene conexión a Internet.
+- Verificar que el usuario creado tiene permisos de administrador.
 
 ---
 
-## Actualización y paquetes básicos post-instalación
+## Actualización del sistema
 
-Una vez arrancado el sistema virtual, abrimos la terminal (`Ctrl + Alt + T`) y ejecutamos los siguientes comandos para actualizar el sistema e instalar utilidades básicas:
+Una vez arrancado el sistema, abrimos la terminal (`Ctrl + Alt + T`) y ejecutamos los siguientes comandos para dejar el sistema actualizado:
 
 ```bash
-# Actualizar el índice de repositorios y paquetes del sistema
+# Actualizar los paquetes del sistema a su última versión
 sudo apt update && sudo apt upgrade -y
-
-# Instalar utilidades esenciales para administración en consola
-sudo apt install -y curl wget git net-tools build-essential
 ```
 
 ---
