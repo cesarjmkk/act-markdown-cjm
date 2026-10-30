@@ -1,68 +1,79 @@
-# Despliegue de un Servidor Nginx en IAW
+# Administración de Almacenamiento con LVM en Linux
 
-Documentación para la puesta en marcha de un entorno web básico en el módulo de Implantación de Aplicaciones Web del IES Clara del Rey.
+Apuntes prácticos sobre la gestión de volúmenes lógicos (LVM) para el módulo de Administración de Sistemas Operativos (ASO).
 
-## Configuración y arranque del servicio
+## Introducción a LVM
 
-Para esta práctica montamos **Nginx** como servidor web principal sobre el sistema. El servicio se ejecuta en *segundo plano* gestionado por el demonio del sistema, y podemos validar que responde localmente ejecutando `curl -I http://localhost` desde la terminal.
-
-### Comandos de instalación
-
-A continuación se indican los comandos utilizados para instalar y dejar arrancado el servidor en una distribución basada en Debian/Ubuntu:
-
-```bash
-# Actualizar lista de paquetes e instalar nginx
-sudo apt update
-sudo apt install -y nginx
-
-# Habilitar el arranque automático y comprobar el estado
-sudo systemctl enable --now nginx
-systemctl is-active nginx
-```
+En entornos de servidores, particionar discos de forma fija suele dar problemas cuando el almacenamiento se queda corto. Con **LVM (Logical Volume Manager)** desacoplamos el almacenamiento físico del sistema de ficheros, permitiendo redimensionar particiones en *caliente* sin necesidad de reiniciar la máquina, utilizando utilidades de consola como `lvextend` de forma sencilla.
 
 ---
 
-## Verificación del entorno
+## Flujo de trabajo y creación de volúmenes
 
-Pasos seguidos para comprobar que el servicio funciona correctamente:
+Para configurar un nuevo volumen lógico desde cero, el orden de creación es el siguiente:
 
-1. Verificar que el proceso está activo y sin fallos en el log.
-2. Comprobar que el puerto 80 está escuchando conexiones TCP.
-3. Abrir el navegador e ingresar a la dirección IP local para ver la página de bienvenida.
+1. Inicializar el disco o partición como volumen físico (Physical Volume).
+2. Crear o extender un grupo de volúmenes (Volume Group) que agrupe los discos físicos.
+3. Crear el volumen lógico (Logical Volume) con el espacio deseado.
+4. Dar formato al volumen lógico (por ejemplo, con `ext4` o `xfs`) y montarlo.
 
-Rutas del sistema utilizadas en la configuración:
+Conceptos clave del esquema LVM:
 
-- `/etc/nginx/nginx.conf`: Archivo principal de configuración.
-- `/etc/nginx/sites-available/`: Directorio con los bloques de configuración de sitios web.
-- `/var/www/html/`: Directorio raíz donde se alojan los ficheros HTML a servir.
+- **PV (Physical Volume):** Discos duros reales o particiones estándar (ej. `/dev/sdb1`).
+- **VG (Volume Group):** Fondo común de almacenamiento que une uno o varios PVs.
+- **LV (Logical Volume):** La partición virtual final sobre la que se crea el sistema de ficheros.
+
+---
+
+## Comandos de aprovisionamiento
+
+Script básico en Bash para preparar un disco secundario `/dev/sdb`, crear un volumen lógico de 10 GB y dejarlo montado en `/data`:
+
+```bash
+#!/bin/bash
+# Preparar el disco físico y el grupo de volúmenes
+sudo pvcreate /dev/sdb
+sudo vgcreate vg_datos /dev/sdb
+
+# Crear un volumen lógico de 10G y darle formato ext4
+sudo lvcreate -L 10G -n lv_almacen vg_datos
+sudo mkfs.ext4 /dev/vg_datos/lv_almacen
+
+# Crear punto de montaje y montar
+sudo mkdir -p /data
+sudo mount /dev/vg_datos/lv_almacen /data
+
+# Comprobar el espacio disponible
+df -hT /data
+```
 
 ---
 
 ## Enlaces de referencia
 
-- Documentación externa: [Guía oficial de Nginx](https://nginx.org/en/docs/).
-- Documentación interna del proyecto: consultar más detalles sobre el entorno en [docs/detalles.md](docs/detalles.md).
+- Documentación externa: [Guía de LVM en kernel.org](https://www.kernel.org/doc/html/latest/admin-guide/LVM.html).
+- Parámetros avanzados y políticas de snapshot: [docs/detalles.md](docs/detalles.md).
 
 ---
 
 ## Recursos gráficos
 
-### Imagen local del repositorio
-Logotipo del servidor utilizado en la práctica, referenciado mediante ruta relativa:
+### Imagen local (Assets)
+Esquema y logotipo del sistema operativo sobre el que se realizan las prácticas:
 
-![Logo Nginx](assets/mi-imagen.png)
+![Tux Linux](assets/mi-imagen.png)
 
-### Sede del instituto (Wikimedia Commons)
-Fotografía del IES Clara del Rey obtenida de Wikimedia Commons mediante su enlace directo:
+### Centro educativo (Wikimedia Commons)
+Fotografía del IES Clara del Rey donde se imparte el ciclo de ASIR:
 
 ![IES Clara del Rey](https://upload.wikimedia.org/wikipedia/commons/2/28/I.e.s._clara_del_rey_%28Prosperidad%2C_Madrid%29.jpg)
 
 ---
 
-## Resumen de puertos y servicios
+## Comparativa de comandos LVM por capa
 
-| Servicio | Puerto por defecto | Ruta / Parámetro principal |
-| :--- | :--- | :--- |
-| **HTTP (Nginx)** | 80 / TCP | `/var/www/html/` |
-| **HTTPS (Nginx)** | 443 / TCP | `/etc/nginx/sites-available/default` |
-| **SSH** | 22 / TCP | `/etc/ssh/sshd_config` |
+| Capa LVM | Comando de creación | Comando de visualización | Comando de eliminación |
+| :--- | :--- | :--- | :--- |
+| **Physical Volume (PV)** | `pvcreate` | `pvs` / `pvdisplay` | `pvremove` |
+| **Volume Group (VG)** | `vgcreate` | `vgs` / `vgdisplay` | `vgremove` |
+| **Logical Volume (LV)** | `lvcreate` | `lvs` / `lvdisplay` | `lvremove` |
