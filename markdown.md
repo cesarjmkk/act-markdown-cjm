@@ -41,9 +41,9 @@ sudo apt install -y curl git
 
 ---
 
-## Centro educativo
+## Centro 
 
-Práctica realizada en el IES Clara del Rey:
+Práctica realizada en IES Clara del Rey, en Madrid:
 
 ![IES Clara del Rey](https://upload.wikimedia.org/wikipedia/commons/2/28/I.e.s._clara_del_rey_%28Prosperidad%2C_Madrid%29.jpg)
 
